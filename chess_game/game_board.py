@@ -117,39 +117,67 @@ class GameBoard:
 
         # Now, given the piece type, determine whether the transition of start -> end is valid according to indexing
         print(f'The piece at index {start_loc} is {piece_type}')
-        if not is_valid_move(piece_type, start_loc, end_loc):
+
+        if not self.is_valid_move(piece_type, start_loc, end_loc):
             return -1
 
         # Make the move
         # If there is a piece of the other colour and end_loc, set that piece to low
         pass
 
-        # Change who's turn it is to move
+        # Change whose turn it is to move
         self.whites_turn = not self.whites_turn
 
     @staticmethod
     def is_valid_move(piece_type: str, start_loc: int, end_loc: int) -> bool:
         """
-        Determines whether or not a move is valid
+        Determines whether a move is valid
         :param piece_type: The piece at start_loc
         :param start_loc: Starting index on the board
         :param end_loc: Finishing index on the board
         :return: Boolean representing whether move is valid or not
         """
-        if piece_type == PAWNS:
-            pass
+        # Left to Right, Bottom from top
+        s_row, s_col = start_loc // 8, start_loc % 8
+        e_row, e_col = end_loc // 8, end_loc % 8
+
+        d_row = abs(s_row - e_row)
+        d_col = abs(s_col - e_col)
+
+        if piece_type == PAWNS:     # TODO: Implement En-Passant movement
+            if not():
+                return False
         elif piece_type == KNIGHTS:
-            pass
-        elif piece_type == BISHOPS:
-            pass
-        elif piece_type == ROOKS:
-            pass
-        elif piece_type == QUEEN:
-            pass
-        elif piece_type == KING:
-            pass
+            if not ((d_row == 1 and d_col == 2) or (d_row == 2 and d_col == 1)):
+                return False
+        elif piece_type == BISHOPS:     # TODO: Check if something is in the way
+            if not (d_row == d_col and d_row != 0):
+                return False
+        elif piece_type == ROOKS:   # TODO: Check if something is in the way
+            if not (d_row == 0 and d_col != 0 or d_row != 0 and d_col == 0):
+                return False
+        elif piece_type == QUEEN:   # TODO: Check if something is in the way
+            if not ((d_row == 0 and d_col != 0 or d_row != 0 and d_col == 0) or (d_row == d_col and d_row != 0)):
+                return False
+        elif piece_type == KING:    # TODO: Check that the king doesn't move into check
+            if not (d_row == 1 or d_col == 1):
+                return False
 
         return True
+
+    def is_checkmate(self) -> bool:
+        """
+        End of game check
+        :return: Boolean representing whether the game is over
+        """
+        pass
+
+    def is_tied(self) -> bool:
+        """
+        Checks if the game is tied
+        :return: Boolean representing whether the game is tied.
+        """
+        pass
 
     def reset(self):
         self.__init__()
