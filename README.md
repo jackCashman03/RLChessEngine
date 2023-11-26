@@ -1,11 +1,18 @@
-# RLChessEngine
-A Chess Engine which I'm going to program over the 23-24 summer holidays. It will hopefully include a GUI that you can 
-play the engine on!
+# Chess Engine using Reinforcement Learning
 
-In an attempt to minimise absraction, and give a greate appreciation of what's going on 'under the hood', I'm going to 
-attempt to minimise the usage of any ML packages (PyTorch etc.), and instead just use a MINMAX algorithm.
+## Overview
+This repo details the outline of a Chess Engine created to solve a subset of
+complicated chess puzzles that (most) human players would struggle to solve in
+a condensed time-frame. 
 
-Ideally, I'll have this completed by the start of University in 2024. My current goal is for the algorithm to reach
-an ELO rating of ~2000+
+This is a project which I am undertaking over the 23-23 Summer holidays from university. 
+Ideally, I'll have this completed by the start of University in 2024. My current goal is 
+for the algorithm to reach an ELO rating of ~2000+
 
-* I'm currently working on implementing basic game logic + a GUI 
+## Dependencies + Usage Instructions
+* TBD
+
+## Performance 
+* TBD (Hopefully 2000+)
+
+
