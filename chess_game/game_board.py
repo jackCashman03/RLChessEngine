@@ -84,7 +84,7 @@ class GameBoard:
         Checks if a move is valid, and performs it if possible.
         :param start_loc: Starting square. Indexed left -> right, bottom -> top
         :param end_loc: Ending square. Indexed left -> right, bottom -> top
-        :return: -1 if invalid move, 1 if valid move
+        :return: -1 if invalid move, 1 if valid move, 2 if checkmate, 3 if draw
         """
 
         # Checks if index is valid
@@ -144,8 +144,15 @@ class GameBoard:
         d_row = abs(s_row - e_row)
         d_col = abs(s_col - e_col)
 
-        if piece_type == PAWNS:     # TODO: Implement En-Passant movement
-            if not():
+        # NOTE: Collision Checking is done in make_move method
+        # TODO: Need to implement collision checking on EVERYTHING here
+        if piece_type == PAWNS:     # TODO: Implement En-Passant movement + taking on diagonal
+            if not(
+                d_row == 1 and d_col == 0  # typical 1 move forward
+                or d_row == 2 and d_col == 0  #empty square infront    # moves 2 forward, but only from the bottom rank
+                or 1    # takes, on a diagonal
+                or 1    # En-Passant
+            ):
                 return False
         elif piece_type == KNIGHTS:
             if not ((d_row == 1 and d_col == 2) or (d_row == 2 and d_col == 1)):
@@ -153,6 +160,7 @@ class GameBoard:
         elif piece_type == BISHOPS:     # TODO: Check if something is in the way
             if not (d_row == d_col and d_row != 0):
                 return False
+
         elif piece_type == ROOKS:   # TODO: Check if something is in the way
             if not (d_row == 0 and d_col != 0 or d_row != 0 and d_col == 0):
                 return False
@@ -165,6 +173,24 @@ class GameBoard:
 
         return True
 
+    def is_empty_square(self, square: int) -> bool:
+        """
+        Check if a specific index is empty
+        :param square: integer representing the square to check
+        :return: True if empty, False if occupied
+        """
+        square_bin = self.num_mapping[square]
+
+        for _, info in self.white_pieces.items():
+            if info & square_bin > 0:
+                return False
+
+        for _, info in self.black_pieces.items():
+            if info & square_bin > 0:
+                return False
+
+        return True
+
     def is_checkmate(self) -> bool:
         """
         End of game check
@@ -172,12 +198,56 @@ class GameBoard:
         """
         pass
 
-    def is_tied(self) -> bool:
+    def is_drawn(self) -> bool:
         """
         Checks if the game is tied
         :return: Boolean representing whether the game is tied.
         """
         pass
+
+    @staticmethod
+    def above_square(square: int) -> int:
+        """
+        Returns the square vertically above the current square, or -1 if it does not exist
+        :param square: integer index of the square
+        :return: Integer representing either the square above, or -1 if it doesn't exist
+        """
+        if 0 <= square <= 55:
+            return square + 8
+        return -1
+
+    @staticmethod
+    def left_square(square: int) -> int:
+        """
+        Returns the square left of the current square, or -1 if it doesn't exist
+        :param square: integer index of the square
+        :return: Integer representing either the square to the left, or -1 if it doesn't exist
+        """
+        if square % 8 != 0:
+            return square + 1
+        return -1
+
+    @staticmethod
+    def right_square(square: int) -> int:
+        """
+        Returns the square right of the current square, or -1 if it doesn't exist
+        :param square: integer index of the square
+        :return: Integer representing either the square to the right, or -1 if it doesn't exist
+        """
+        if square % 8 != 7:
+            return square - 1
+        return -1
+
+    @staticmethod
+    def below_square(square: int) -> int:
+        """
+        Returns the square below the current square, or -1 if it doesn't exist
+        :param square: integer index of the square
+        :return: Integer representing either the square below, or -1 if it doesn't exist
+        """
+        if 8 <= square <= 63:
+            return square - 8
+        return -1
 
     def reset(self):
         self.__init__()
